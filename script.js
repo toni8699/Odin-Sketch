@@ -50,13 +50,13 @@ document.addEventListener("mouseup", () => {
 const colorPicker = document.querySelector('input[type="color"]');
 console.log(colorPicker); 
 let hex = "#000000";
-let chosenColor = 'rgb(0,0,0)';
+let chosenColor = hexToRgb(hex);
 colorPicker.addEventListener("input", () => {
   hex = colorPicker.value;
   chosenColor = hexToRgb(hex);
   console.log(chosenColor);
 })
-console.log(hex);
+console.log(chosenColor);
 
 cells.forEach((cell) => {
   cell.addEventListener("mousemove", () => {
@@ -64,7 +64,9 @@ cells.forEach((cell) => {
 
     // Get the current background color of the cell
     // Extract the RGBA components
+    console.log(chosenColor);
     const { red, green, blue } = chosenColor;
+    console.log(red, green, blue);
     let currentColor = cell.style.backgroundColor;
     console.log(currentColor);
     if (!currentColor) {
