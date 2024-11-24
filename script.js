@@ -5,10 +5,11 @@ input.addEventListener("input", () => {
   console.log(input.value);
   row = input.value;
   col = input.value;
-  renderCanvas(); // Call the renderCanvas function to update the canvas
+  renderCanvas(row,col); // Call the renderCanvas function to update the canvas
 });
 
-function renderCanvas() {
+
+function renderCanvas(row,col) {
   container.innerHTML = ''; // Clear the container
   for (let i = 0; i < row * col; i++) {
     const cell = document.createElement("div");
@@ -17,6 +18,7 @@ function renderCanvas() {
     cell.style.width = `${canvasSize / row - 2}px`;
     cell.style.height = `${canvasSize / col - 2}px`;
     cell.style.border = "1px solid black";
+    handleMouseMove(cell);
   }
   cells = document.querySelectorAll(".cell"); // Update the cells variable
 }
@@ -79,15 +81,9 @@ colorPicker.addEventListener("input", () => {
   randomColor = false;
   hex = colorPicker.value;
   chosenColor = hexToRgb(hex);
-  console.log(chosenColor);
-})
-console.log(chosenColor);
+});
 
-
-
-
-
-cells.forEach((cell) => {
+function handleMouseMove(cell) {
   cell.addEventListener("mousemove", () => {
     if (!isMouseDown) return;
     if (randomColor) {
@@ -112,9 +108,10 @@ cells.forEach((cell) => {
           }
         };
       });  
+}
+cells.forEach((cell) => {
+  handleMouseMove(cell);
 });
-
-
 const clear = document.querySelector("#clear");
 clear.addEventListener("click", () => {
   cells.forEach((cell) => {
