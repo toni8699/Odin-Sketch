@@ -29,7 +29,15 @@ function getRGBAComponents(color) {
   // Default to no opacity (fully transparent black).
   return { red: 0, green: 0, blue: 0, alpha: 0 };
 }
-console.log(getRGBAComponents('rgb(255,0,0)'));
+function hexToRgb(hex) {
+  var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+  return result ? {
+    red: parseInt(result[1], 16),
+    green: parseInt(result[2], 16),
+    blue: parseInt(result[3], 16)
+  } : null;
+}
+
 let isMouseDown = false;
 
 document.addEventListener("mousedown", () => {
@@ -39,7 +47,16 @@ document.addEventListener("mousedown", () => {
 document.addEventListener("mouseup", () => {
   isMouseDown = false;
 });
-const chosenColor = 'rgb(0,255,0)';
+const colorPicker = document.querySelector('input[type="color"]');
+console.log(colorPicker); 
+let hex = "#000000";
+let chosenColor = 'rgb(0,0,0)';
+colorPicker.addEventListener("input", () => {
+  hex = colorPicker.value;
+  chosenColor = hexToRgb(hex);
+  console.log(chosenColor);
+})
+console.log(hex);
 
 cells.forEach((cell) => {
   cell.addEventListener("mousemove", () => {
@@ -47,7 +64,7 @@ cells.forEach((cell) => {
 
     // Get the current background color of the cell
     // Extract the RGBA components
-    const { red, green, blue, alpha } = getRGBAComponents(chosenColor);
+    const { red, green, blue } = chosenColor;
     let currentColor = cell.style.backgroundColor;
     console.log(currentColor);
     if (!currentColor) {
