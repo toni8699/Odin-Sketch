@@ -1,6 +1,27 @@
 let row = 16;
 let col = 16;
 const input = document.querySelector("#size");
+const container = document.querySelector(".canvas");
+const canvasSize =430;
+container.style.width = `${canvasSize}px`;
+container.style.height = `${canvasSize}px`;
+container.style.border = "1px solid black";
+
+
+//initial render
+renderCanvas(row,col);
+
+function renderCanvas(row,col) {
+  container.innerHTML = ''; // Clear the container
+  for (let i = 0; i < row * col; i++) {
+    const cell = createCell(row, col);
+    container.appendChild(cell);
+    handleMouseMove(cell);
+  }
+  cells = document.querySelectorAll(".cell"); // Update the cells variable
+}
+
+
 input.addEventListener("input", () => {
   console.log(input.value);
   row = input.value;
@@ -8,34 +29,6 @@ input.addEventListener("input", () => {
   renderCanvas(row,col); // Call the renderCanvas function to update the canvas
 });
 
-
-function renderCanvas(row,col) {
-  container.innerHTML = ''; // Clear the container
-  for (let i = 0; i < row * col; i++) {
-    const cell = document.createElement("div");
-    cell.classList.add("cell");
-    container.appendChild(cell);
-    cell.style.width = `${canvasSize / row - 2}px`;
-    cell.style.height = `${canvasSize / col - 2}px`;
-    cell.style.border = "1px solid black";
-    handleMouseMove(cell);
-  }
-  cells = document.querySelectorAll(".cell"); // Update the cells variable
-}
-const container = document.querySelector(".canvas");
-const canvasSize =430;
-container.style.width = `${canvasSize}px`;
-container.style.height = `${canvasSize}px`;
-container.style.border = "1px solid black";
-for (let i = 0; i < row*col; i++) {
-    const cell= document.createElement("div");
-    cell.classList.add("cell");
-    container.appendChild(cell);
-    cell.style.width = `${canvasSize/row -2}px`;
-    cell.style.height = `${canvasSize/col -2}px`;
-    cell.style.border = "1px solid black";
-}
-const cells = document.querySelectorAll(".cell");
 
 // Extract RGBA components from a color string.
 function getRGBAComponents(color) {
@@ -108,6 +101,25 @@ function handleMouseMove(cell) {
           }
         };
       });  
+}function createCell(row, col) {
+  const cell = document.createElement("div");
+  cell.classList.add("cell");
+  cell.style.width = `${canvasSize / row - 2}px`;
+  cell.style.height = `${canvasSize / col - 2}px`;
+  cell.style.border = "1px solid black";
+  return cell;
+}
+
+function drawCanvas(row, col) {
+  container.innerHTML = ''; // Clear the container
+  for (let i = 0; i < row * col; i++) {
+    const cell = createCell(row, col);
+    container.appendChild(cell);
+    cell.addEventListener("mousemove", () => {
+      // ...
+    });
+  }
+  cells = document.querySelectorAll(".cell"); // Update the cells variable
 }
 cells.forEach((cell) => {
   handleMouseMove(cell);
