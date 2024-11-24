@@ -1,7 +1,27 @@
-const row = 16;
-const col = 16;
+let row = 16;
+let col = 16;
+const input = document.querySelector("#size");
+input.addEventListener("input", () => {
+  console.log(input.value);
+  row = input.value;
+  col = input.value;
+  renderCanvas(); // Call the renderCanvas function to update the canvas
+});
+
+function renderCanvas() {
+  container.innerHTML = ''; // Clear the container
+  for (let i = 0; i < row * col; i++) {
+    const cell = document.createElement("div");
+    cell.classList.add("cell");
+    container.appendChild(cell);
+    cell.style.width = `${canvasSize / row - 2}px`;
+    cell.style.height = `${canvasSize / col - 2}px`;
+    cell.style.border = "1px solid black";
+  }
+  cells = document.querySelectorAll(".cell"); // Update the cells variable
+}
 const container = document.querySelector(".canvas");
-const canvasSize =400;
+const canvasSize =430;
 container.style.width = `${canvasSize}px`;
 container.style.height = `${canvasSize}px`;
 container.style.border = "1px solid black";
@@ -39,7 +59,11 @@ function hexToRgb(hex) {
 }
 
 let isMouseDown = false;
-
+let randomColor = false;
+const random = document.querySelector("#random");
+random.addEventListener("click", () => {
+  randomColor = !randomColor;
+});
 document.addEventListener("mousedown", () => {
   isMouseDown = true;
 });
@@ -52,31 +76,42 @@ console.log(colorPicker);
 let hex = "#000000";
 let chosenColor = hexToRgb(hex);
 colorPicker.addEventListener("input", () => {
+  randomColor = false;
   hex = colorPicker.value;
   chosenColor = hexToRgb(hex);
   console.log(chosenColor);
 })
 console.log(chosenColor);
 
+
+
+
+
 cells.forEach((cell) => {
   cell.addEventListener("mousemove", () => {
     if (!isMouseDown) return;
-
-    // Get the current background color of the cell
-    // Extract the RGBA components
-    console.log(chosenColor);
-    const { red, green, blue } = chosenColor;
-    console.log(red, green, blue);
-    let currentColor = cell.style.backgroundColor;
-    console.log(currentColor);
-    if (!currentColor) {
-      cell.style.backgroundColor = `rgba(${red}, ${green}, ${blue}, 0.1)`;
+    if (randomColor) {
+      const red = Math.floor(Math.random() * 256);
+      const green = Math.floor(Math.random() * 256);
+      const blue = Math.floor(Math.random() * 256);
+      cell.style.backgroundColor = `rgba(${red}, ${green}, ${blue})`;
     } else{
-      currentColor = getRGBAComponents(currentColor);
-      const newAlpha = currentColor.alpha + 0.1;
-      cell.style.backgroundColor = `rgba(${red}, ${green}, ${blue}, ${newAlpha})`;
-    }
-  });
+          // Get the current background color of the cell
+          // Extract the RGBA components
+          console.log(chosenColor);
+          const { red, green, blue } = chosenColor;
+          console.log(red, green, blue);
+          let currentColor = cell.style.backgroundColor;
+          console.log(currentColor);
+          if (!currentColor) {
+            cell.style.backgroundColor = `rgba(${red}, ${green}, ${blue}, 0.1)`;
+          } else{
+            currentColor = getRGBAComponents(currentColor);
+            const newAlpha = currentColor.alpha + 0.1;
+            cell.style.backgroundColor = `rgba(${red}, ${green}, ${blue}, ${newAlpha})`;
+          }
+        };
+      });  
 });
 
 
