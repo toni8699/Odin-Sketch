@@ -26,7 +26,7 @@ document.addEventListener("mousedown", () => {
 document.addEventListener("mouseup", () => {
   isMouseDown = false;
 })
-
+const initialColor ='rgb(0, 0, 0)';
 cells.forEach((cell) => {
   cell.addEventListener("mousemove", () => {
     if (!isMouseDown) {
@@ -34,20 +34,19 @@ cells.forEach((cell) => {
     }
     const currentColor = window.getComputedStyle(cell).backgroundColor;
     if (currentColor === "rgb(0, 0, 0)") {
+      console.log(getOpacity(cell.style.backgroundColor));
       console.log('this branch 0');
       return;
     }
     if(!currentColor){
       console.log('this branch 1');
-      cell.style.backgroundColor = "rgba(0, 0, 0,0.1)";
+      cell.style.backgroundColor = "rgb(0, 0, 0,0.1)";
     }
     else{
       console.log('this branch 2');
-      const opacity = getOpacity(cell.style.backgroundColor);
-      if (opacity<1){
-        const newOpacity=Math.min(opacity+0.1,1);
-        cell.style.backgroundColor = `rgba(0, 0, 0,${newOpacity})`;
-      }
+      const newOpacity = getOpacity(cell.style.backgroundColor)+0.1;
+      cell.style.backgroundColor = `rgb(0, 0, 0,${newOpacity})`;
+      
     }
   });
 });
