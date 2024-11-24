@@ -1,11 +1,10 @@
 const row = 16;
 const col = 16;
-const container = document.querySelector(".container");
+const container = document.querySelector(".canvas");
 const canvasSize =400;
 container.style.width = `${canvasSize}px`;
 container.style.height = `${canvasSize}px`;
 container.style.border = "1px solid black";
-console.log(container);
 for (let i = 0; i < row*col; i++) {
     const cell= document.createElement("div");
     cell.classList.add("cell");
@@ -15,27 +14,47 @@ for (let i = 0; i < row*col; i++) {
     cell.style.border = "1px solid black";
 }
 const cells = document.querySelectorAll(".cell");
-// cells.forEach((cell) => {
-//     cell.addEventListener("mousedown", () => {
-//         cell.style.backgroundColor = "black";
-//     });
-// });
-/*************  ✨ Codeium Command ⭐  *************/
+function getOpacity(color) {
+  // Extract opacity from `rgba` format using a regex.
+  const match = color.match(/rgba?\(0,\s*0,\s*0,\s*(\d?\.?\d+)\)/);
+  return match ? parseFloat(match[1]) : 0;
+}
 let isMouseDown = false;
-
 document.addEventListener("mousedown", () => {
   isMouseDown = true;
 });
-
 document.addEventListener("mouseup", () => {
   isMouseDown = false;
-});
+})
 
 cells.forEach((cell) => {
   cell.addEventListener("mousemove", () => {
-    if (isMouseDown) {
-      cell.style.backgroundColor = "black";
+    if (!isMouseDown) {
+      return;
+    }
+    const currentColor = window.getComputedStyle(cell).backgroundColor;
+    if (currentColor === "rgb(0, 0, 0)") {
+      console.log('this branch 0');
+      return;
+    }
+    if(!currentColor){
+      console.log('this branch 1');
+      cell.style.backgroundColor = "rgba(0, 0, 0,0.1)";
+    }
+    else{
+      console.log('this branch 2');
+      const opacity = getOpacity(cell.style.backgroundColor);
+      if (opacity<1){
+        const newOpacity=Math.min(opacity+0.1,1);
+        cell.style.backgroundColor = `rgba(0, 0, 0,${newOpacity})`;
+      }
     }
   });
 });
-/******  bbce2438-07da-4552-a58b-46ddaf6acbee  *******/
+
+const clear = document.querySelector("#clear");
+clear.addEventListener("click", () => {
+  cells.forEach((cell) => {
+    cell.style.backgroundColor = "white";
+  });
+});
