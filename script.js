@@ -5,7 +5,7 @@ const container = document.querySelector(".canvas");
 const canvasSize =430;
 container.style.width = `${canvasSize}px`;
 container.style.height = `${canvasSize}px`;
-container.style.border = "1px solid black";
+// container.style.border = "1px solid black";
 
 
 //initial render
@@ -106,7 +106,7 @@ function handleMouseMove(cell) {
   cell.classList.add("cell");
   cell.style.width = `${canvasSize / row - 2}px`;
   cell.style.height = `${canvasSize / col - 2}px`;
-  cell.style.border = "1px solid black";
+  // cell.style.border = "1px solid black";
   return cell;
 }
 
