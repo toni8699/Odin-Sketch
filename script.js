@@ -16,6 +16,12 @@ slider.addEventListener("input", () => {
 
 //initial render
 renderCanvas(row,col);
+function DrawRandomColor() {
+  const red = Math.floor(Math.random() * 256);
+  const green = Math.floor(Math.random() * 256);
+  const blue = Math.floor(Math.random() * 256);
+  return `rgba(${red}, ${green}, ${blue})`;
+}
 
 function renderCanvas(row,col) {
   container.innerHTML = ''; // Clear the container
@@ -51,22 +57,23 @@ function hexToRgb(hex) {
 
 
 const colorPicker = document.querySelector('input[type="color"]');
-console.log(colorPicker); 
 let hex = "#000000";
 let chosenColor = hexToRgb(hex);
+let randomColor = false;
+
 colorPicker.addEventListener("input", () => {
   randomColor = false;
   hex = colorPicker.value;
   chosenColor = hexToRgb(hex);
 });
+random.addEventListener("click", () => {
+  randomColor = !randomColor;
+});
 
 function handleMouseMove(cell) {
   let isMouseDown = false;
-  let randomColor = false;
   const random = document.querySelector("#random");
-  random.addEventListener("click", () => {
-    randomColor = !randomColor;
-  });
+ 
   document.addEventListener("mousedown", () => {
     isMouseDown = true;
   });
@@ -77,27 +84,26 @@ function handleMouseMove(cell) {
   cell.addEventListener("mousemove", () => {
     if (!isMouseDown) return;
     if (randomColor) {
-      const red = Math.floor(Math.random() * 256);
-      const green = Math.floor(Math.random() * 256);
-      const blue = Math.floor(Math.random() * 256);
-      cell.style.backgroundColor = `rgba(${red}, ${green}, ${blue})`;
+      cell.style.backgroundColor = DrawRandomColor();
     } else{
-          // Get the current background color of the cell
-          // Extract the RGBA components
-          const { red, green, blue } = chosenColor;
-          console.log(red, green, blue);
-          let currentColor = cell.style.backgroundColor;
-          console.log(currentColor);
-          if (!currentColor) {
-            cell.style.backgroundColor = `rgba(${red}, ${green}, ${blue}, 0.1)`;
-          } else{
-            currentColor = getRGBAComponents(currentColor);
-            const newAlpha = currentColor.alpha + 0.05;
-            cell.style.backgroundColor = `rgba(${red}, ${green}, ${blue}, ${newAlpha})`;
-          }
+          DrawSpecificColor(chosenColor,cell);
         };
       });  
-}function createCell(row, col) {
+}
+
+
+function DrawSpecificColor(chosenColor,cell) {
+  const { red, green, blue } = chosenColor;
+  let currentColor = cell.style.backgroundColor;
+  if (!currentColor) {
+    cell.style.backgroundColor = `rgba(${red}, ${green}, ${blue}, 0.1)`;
+  } else {
+    currentColor = getRGBAComponents(currentColor);
+    const newAlpha = currentColor.alpha + 0.05;
+    cell.style.backgroundColor = `rgba(${red}, ${green}, ${blue}, ${newAlpha})`;
+  }
+}
+function createCell(row, col) {
   const cell = document.createElement("div");
   cell.classList.add("cell");
   cell.style.width = `${canvasSize / row}px`;
