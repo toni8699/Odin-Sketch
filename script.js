@@ -2,11 +2,17 @@ let row = 16;
 let col = 16;
 const input = document.querySelector("#size");
 const container = document.querySelector(".canvas");
-const canvasSize =430;
+const canvasSize =450;
 container.style.width = `${canvasSize}px`;
 container.style.height = `${canvasSize}px`;
 // container.style.border = "1px solid black";
 
+const slider =document.querySelector(".slider");
+slider.addEventListener("input", () => {
+  row = slider.value;
+  col = slider.value;
+  renderCanvas(row,col);
+});
 
 //initial render
 renderCanvas(row,col);
@@ -20,16 +26,6 @@ function renderCanvas(row,col) {
   }
   cells = document.querySelectorAll(".cell"); // Update the cells variable
 }
-
-
-input.addEventListener("input", () => {
-  console.log(input.value);
-  row = input.value;
-  col = input.value;
-  renderCanvas(row,col); // Call the renderCanvas function to update the canvas
-});
-
-
 // Extract RGBA components from a color string.
 function getRGBAComponents(color) {
   const match = color.match(/rgba?\(\s*(\d+),\s*(\d+),\s*(\d+),?\s*(\d?\.?\d+)?\)/);
@@ -53,19 +49,7 @@ function hexToRgb(hex) {
   } : null;
 }
 
-let isMouseDown = false;
-let randomColor = false;
-const random = document.querySelector("#random");
-random.addEventListener("click", () => {
-  randomColor = !randomColor;
-});
-document.addEventListener("mousedown", () => {
-  isMouseDown = true;
-});
 
-document.addEventListener("mouseup", () => {
-  isMouseDown = false;
-});
 const colorPicker = document.querySelector('input[type="color"]');
 console.log(colorPicker); 
 let hex = "#000000";
@@ -77,6 +61,19 @@ colorPicker.addEventListener("input", () => {
 });
 
 function handleMouseMove(cell) {
+  let isMouseDown = false;
+  let randomColor = false;
+  const random = document.querySelector("#random");
+  random.addEventListener("click", () => {
+    randomColor = !randomColor;
+  });
+  document.addEventListener("mousedown", () => {
+    isMouseDown = true;
+  });
+  
+  document.addEventListener("mouseup", () => {
+    isMouseDown = false;
+  });
   cell.addEventListener("mousemove", () => {
     if (!isMouseDown) return;
     if (randomColor) {
@@ -87,7 +84,6 @@ function handleMouseMove(cell) {
     } else{
           // Get the current background color of the cell
           // Extract the RGBA components
-          console.log(chosenColor);
           const { red, green, blue } = chosenColor;
           console.log(red, green, blue);
           let currentColor = cell.style.backgroundColor;
@@ -96,7 +92,7 @@ function handleMouseMove(cell) {
             cell.style.backgroundColor = `rgba(${red}, ${green}, ${blue}, 0.1)`;
           } else{
             currentColor = getRGBAComponents(currentColor);
-            const newAlpha = currentColor.alpha + 0.1;
+            const newAlpha = currentColor.alpha + 0.05;
             cell.style.backgroundColor = `rgba(${red}, ${green}, ${blue}, ${newAlpha})`;
           }
         };
@@ -104,8 +100,8 @@ function handleMouseMove(cell) {
 }function createCell(row, col) {
   const cell = document.createElement("div");
   cell.classList.add("cell");
-  cell.style.width = `${canvasSize / row - 2}px`;
-  cell.style.height = `${canvasSize / col - 2}px`;
+  cell.style.width = `${canvasSize / row}px`;
+  cell.style.height = `${canvasSize / col}px`;
   // cell.style.border = "1px solid black";
   return cell;
 }

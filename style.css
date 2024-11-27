@@ -8,17 +8,23 @@
     flex-direction: row;
     border : 1px solid black;
     align-items: center;
+    gap: 100px;
     align-content: space-between;
 }
 .cell{
-    background-color: white;
+    background-color: white;  
+    box-sizing: border-box;
+
 }
 .slidecontainer {
-    width: 25%; /* Width of the outside container */
+    width: 100%; /* Width of the outside container */
   }
+
   
+
   /* The slider itself */
   .slider {
+    direction: rtl;
     -webkit-appearance: none;  /* Override default CSS styles */
     appearance: none;
     width: 100%; /* Full-width */
